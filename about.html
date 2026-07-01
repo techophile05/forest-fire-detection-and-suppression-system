@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Forest Fire Detection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌲</span>
+                    <h1>Forest Fire Detection System</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Dashboard</a>
+                    <a href="logs.html" class="nav-link">Logs</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+                    <a href="#" class="nav-link active">About</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="about-hero">
+                <div class="hero-icon">🌲🔥</div>
+                <h2>Forest Fire Detection System</h2>
+                <p>Advanced ESP32-powered LoRa gateway for early forest fire detection and automated suppression</p>
+            </div>
+
+            <div class="about-content">
+                <!-- Project Overview -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>📊 Project Overview</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>This forest fire detection system combines cutting-edge IoT technology with environmental monitoring to provide early warning and automated response capabilities for forest fire threats.</p>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">📡</div>
+                                <div class="feature-content">
+                                    <h4>LoRa Connectivity</h4>
+                                    <p>Long-range, low-power wireless communication for remote sensor networks</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🌡️</div>
+                                <div class="feature-content">
+                                    <h4>Multi-Sensor Monitoring</h4>
+                                    <p>Temperature, humidity, smoke, and gas detection with real-time analysis</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🧯</div>
+                                <div class="feature-content">
+                                    <h4>Automated Response</h4>
+                                    <p>Immediate fire suppression deployment when critical thresholds are exceeded</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📱</div>
+                                <div class="feature-content">
+                                    <h4>Web Dashboard</h4>
+                                    <p>Real-time monitoring and control through modern web interface</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Technical Specifications -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>⚙️ Technical Specifications</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="specs-grid">
+                            <div class="spec-category">
+                                <h4>Hardware Components</h4>
+                                <ul>
+                                    <li><strong>Microcontroller:</strong> ESP32-WROOM-32</li>
+                                    <li><strong>LoRa Module:</strong> SX1278 (433MHz)</li>
+                                    <li><strong>Sensors:</strong> DHT22, MQ-2, MQ-135</li>
+                                    <li><strong>Actuators:</strong> Servo motors, pumps</li>
+                                    <li><strong>Power:</strong> Solar/Battery backup</li>
+                                </ul>
+                            </div>
+                            <div class="spec-category">
+                                <h4>Communication</h4>
+                                <ul>
+                                    <li><strong>WiFi:</strong> 802.11 b/g/n</li>
+                                    <li><strong>LoRa Range:</strong> Up to 10km</li>
+                                    <li><strong>Data Rate:</strong> 0.3 - 37.5 kbps</li>
+                                    <li><strong>Frequency:</strong> 433/868/915 MHz</li>
+                                    <li><strong>Protocol:</strong> HTTP/WebSocket</li>
+                                </ul>
+                            </div>
+                            <div class="spec-category">
+                                <h4>Environmental</h4>
+                                <ul>
+                                    <li><strong>Temperature:</strong> -40°C to +85°C</li>
+                                    <li><strong>Humidity:</strong> 0-100% RH</li>
+                                    <li><strong>IP Rating:</strong> IP65 (weatherproof)</li>
+                                    <li><strong>Power:</strong> 3.3V-5V DC</li>
+                                    <li><strong>Consumption:</strong> &lt;200mA active</li>
+                                </ul>
+                            </div>
+                            <div class="spec-category">
+                                <h4>Software</h4>
+                                <ul>
+                                    <li><strong>Framework:</strong> Arduino Core for ESP32</li>
+                                    <li><strong>Libraries:</strong> WiFi, LoRa, WebServer</li>
+                                    <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript</li>
+                                    <li><strong>Data Format:</strong> JSON/CSV</li>
+                                    <li><strong>Updates:</strong> OTA firmware updates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- System Architecture -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>🏗️ System Architecture</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="architecture-diagram">
+                            <div class="arch-layer">
+                                <h4>🌐 Web Interface Layer</h4>
+                                <p>Responsive dashboard, real-time monitoring, mobile-friendly design</p>
+                            </div>
+                            <div class="arch-arrow">↓</div>
+                            <div class="arch-layer">
+                                <h4>🖥️ Gateway Layer (ESP32)</h4>
+                                <p>Data processing, WiFi connectivity, web server, alert management</p>
+                            </div>
+                            <div class="arch-arrow">↓</div>
+                            <div class="arch-layer">
+                                <h4>📡 Communication Layer (LoRa)</h4>
+                                <p>Long-range wireless mesh network, low power consumption</p>
+                            </div>
+                            <div class="arch-arrow">↓</div>
+                            <div class="arch-layer">
+                                <h4>🔍 Sensor Layer</h4>
+                                <p>Environmental monitoring, fire detection, data collection</p>
+                            </div>
+                        </div>
+                        
+                        <div class="workflow-steps">
+                            <h4>🔄 Detection Workflow</h4>
+                            <div class="steps-grid">
+                                <div class="step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h5>Data Collection</h5>
+                                        <p>Sensors collect environmental data every 30 seconds</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h5>LoRa Transmission</h5>
+                                        <p>Data transmitted to gateway via LoRa network</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h5>Risk Analysis</h5>
+                                        <p>Gateway analyzes data and calculates fire risk score</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h5>Alert & Response</h5>
+                                        <p>Automatic alerts and optional fire suppression deployment</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Guide -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>🚀 Quick Start Guide</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="install-steps">
+                            <div class="install-step">
+                                <div class="step-header">
+                                    <span class="step-icon">1️⃣</span>
+                                    <h4>Hardware Setup</h4>
+                                </div>
+                                <div class="step-details">
+                                    <p>Connect the ESP32 to LoRa module using the specified pin configuration:</p>
+                                    <div class="pin-mapping">
+                                        <code>
+                                            SCK: GPIO 5 → LoRa SCK<br>
+                                            MISO: GPIO 19 → LoRa MISO<br>
+                                            MOSI: GPIO 27 → LoRa MOSI<br>
+                                            SS: GPIO 18 → LoRa NSS<br>
+                                            RST: GPIO 14 → LoRa RST<br>
+                                            DIO0: GPIO 26 → LoRa DIO0
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="install-step">
+                                <div class="step-header">
+                                    <span class="step-icon">2️⃣</span>
+                                    <h4>Software Configuration</h4>
+                                </div>
+                                <div class="step-details">
+                                    <p>Update the Arduino code with your network credentials:</p>
+                                    <div class="code-snippet">
+                                        <code>
+                                            const char* ssid = "Your_WiFi_Name";<br>
+                                            const char* password = "Your_WiFi_Password";
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="install-step">
+                                <div class="step-header">
+                                    <span class="step-icon">3️⃣</span>
+                                    <h4>Upload & Deploy</h4>
+                                </div>
+                                <div class="step-details">
+                                    <p>Flash the code to ESP32 and access the web interface:</p>
+                                    <ol>
+                                        <li>Upload code via Arduino IDE</li>
+                                        <li>Open Serial Monitor to get IP address</li>
+                                        <li>Access dashboard at http://[IP_ADDRESS]</li>
+                                        <li>Configure alert thresholds in settings</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Team & Credits -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>👥 Development Team</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="team-grid">
+                            <div class="team-card">
+                                <div class="team-avatar">🧑‍💻</div>
+                                <div class="team-info">
+                                    <h4>Hardware Engineer</h4>
+                                    <p>ESP32 & LoRa integration, sensor calibration, power management</p>
+                                </div>
+                            </div>
+                            <div class="team-card">
+                                <div class="team-avatar">🎨</div>
+                                <div class="team-info">
+                                    <h4>Frontend Developer</h4>
+                                    <p>Web dashboard design, responsive UI, user experience</p>
+                                </div>
+                            </div>
+                            <div class="team-card">
+                                <div class="team-avatar">⚙️</div>
+                                <div class="team-info">
+                                    <h4>Systems Architect</h4>
+                                    <p>Network topology, data flow, system integration</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="credits">
+                            <h4>🙏 Acknowledgments</h4>
+                            <ul>
+                                <li><strong>Arduino Community</strong> - ESP32 development framework</li>
+                                <li><strong>Sandeep Mistry</strong> - LoRa library for Arduino</li>
+                                <li><strong>Espressif Systems</strong> - ESP32 platform and documentation</li>
+                                <li><strong>Open Source Contributors</strong> - Various libraries and tools</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Support & Contact -->
+                <section class="about-section">
+                    <div class="section-header">
+                        <h3>📞 Support & Contact</h3>
+                    </div>
+                    <div class="section-content">
+                        <div class="support-grid">
+                            <div class="support-card">
+                                <div class="support-icon">📚</div>
+                                <div class="support-content">
+                                    <h4>Documentation</h4>
+                                    <p>Complete setup guides, API reference, and troubleshooting tips</p>
+                                    <a href="#" class="support-link">View Docs →</a>
+                                </div>
+                            </div>
+                            <div class="support-card">
+                                <div class="support-icon">🐛</div>
+                                <div class="support-content">
+                                    <h4>Bug Reports</h4>
+                                    <p>Found an issue? Help us improve by reporting bugs and issues</p>
+                                    <a href="#" class="support-link">Report Bug →</a>
+                                </div>
+                            </div>
+                            <div class="support-card">
+                                <div class="support-icon">💡</div>
+                                <div class="support-content">
+                                    <h4>Feature Requests</h4>
+                                    <p>Suggest new features and improvements for future releases</p>
+                                    <a href="#" class="support-link">Request Feature →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 Forest Fire Detection System | ESP32 LoRa Gateway</p>
+                <div class="footer-version">
+                    <span>Version 1.2.3 | Build 20240125</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <style>
+        .about-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--panel), rgba(46, 204, 113, 0.1));
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .about-hero h2 {
+            font-size: 32px;
+            margin: 0 0 10px;
+            color: var(--text);
+        }
+        
+        .about-hero p {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .about-section {
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .section-content {
+            padding: 25px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 12px;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h4 {
+            margin: 0 0 8px;
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .feature-content p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .spec-category {
+            background: rgba(0,0,0,0.15);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .spec-category h4 {
+            margin: 0 0 15px;
+            color: var(--accent);
+            font-size: 16px;
+        }
+        
+        .spec-category ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .spec-category li {
+            padding: 5px 0;
+            color: var(--muted);
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        
+        .spec-category li:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-category strong {
+            color: var(--text);
+        }
+        
+        .architecture-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .arch-layer {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(46, 204, 113, 0.05));
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .arch-layer h4 {
+            margin: 0 0 8px;
+            color: var(--accent);
+        }
+        
+        .arch-layer p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .arch-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .step {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .step-content h5 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .step-content p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .install-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .install-step {
+            background: rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .step-icon {
+            font-size: 24px;
+        }
+        
+        .step-header h4 {
+            margin: 0;
+            color: var(--text);
+        }
+        
+        .pin-mapping, .code-snippet {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: ui-monospace, monospace;
+        }
+        
+        .pin-mapping code, .code-snippet code {
+            color: #8fd3a9;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .step-details ol {
+            margin: 10px 0 0;
+            padding-left: 20px;
+            color: var(--muted);
+        }
+        
+        .step-details ol li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .team-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.15);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .team-avatar {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        
+        .team-info h4 {
+            margin: 0 0 5px;
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .team-info p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .credits {
+            background: rgba(0,0,0,0.15);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .credits h4 {
+            margin: 0 0 15px;
+            color: var(--accent);
+        }
+        
+        .credits ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .credits li {
+            padding: 5px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .credits strong {
+            color: var(--text);
+        }
+        
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .support-card {
+            background: rgba(0,0,0,0.15);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .support-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .support-content h4 {
+            margin: 0 0 10px;
+            color: var(--text);
+        }
+        
+        .support-content p {
+            margin: 0 0 15px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .support-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-version {
+            color: var(--muted);
+            font-size: 12px;
+        }
+        
+        @media (max-width: 640px) {
+            .about-hero {
+                padding: 30px 15px;
+            }
+            
+            .hero-icon {
+                font-size: 36px;
+            }
+            
+            .about-hero h2 {
+                font-size: 24px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .architecture-diagram {
+                flex-direction: column;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

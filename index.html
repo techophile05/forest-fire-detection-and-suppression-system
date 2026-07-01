@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="5">
+    <title>🌲 Forest Fire Detection Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="theme-color" content="#2d5016">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌲</span>
+                    <h1>Forest Fire Detection System</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#" class="nav-link active">Dashboard</a>
+                    <a href="logs.html" class="nav-link">Logs</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Status Cards -->
+            <div class="status-grid">
+                <div class="status-card system-status">
+                    <div class="card-header">
+                        <span class="card-icon">📡</span>
+                        <h3>System Status</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <span class="status-dot online" id="systemStatus"></span>
+                            <span class="status-text" id="systemStatusText">System Online</span>
+                        </div>
+                        <div class="status-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Gateway IP:</span>
+                                <span class="detail-value" id="gatewayIP">Loading...</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Uptime:</span>
+                                <span class="detail-value" id="uptime">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card node-status">
+                    <div class="card-header">
+                        <span class="card-icon">🔗</span>
+                        <h3>Node Status</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="status-indicator">
+                            <span class="status-dot" id="nodeStatus"></span>
+                            <span class="status-text" id="nodeStatusText">Checking...</span>
+                        </div>
+                        <div class="status-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Last Seen:</span>
+                                <span class="detail-value" id="lastSeen">Never</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Signal Strength:</span>
+                                <span class="detail-value" id="signalStrength">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card fire-alert">
+                    <div class="card-header">
+                        <span class="card-icon">🔥</span>
+                        <h3>Fire Alert</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="alert-level" id="alertLevel">
+                            <span class="alert-text">No Alert</span>
+                        </div>
+                        <div class="status-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Risk Level:</span>
+                                <span class="detail-value" id="riskLevel">Low</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Last Alert:</span>
+                                <span class="detail-value" id="lastAlert">None</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensor Data Section -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h2>📊 Live Sensor Data</h2>
+                    <div class="refresh-indicator" id="refreshIndicator">
+                        <span class="refresh-dot"></span>
+                        <span>Auto-refresh: 5s</span>
+                    </div>
+                </div>
+                
+                <div class="sensor-grid">
+                    <div class="sensor-card temperature">
+                        <div class="sensor-icon">🌡️</div>
+                        <div class="sensor-info">
+                            <h4>Temperature</h4>
+                            <div class="sensor-value" id="temperature">--°C</div>
+                            <div class="sensor-trend" id="tempTrend">Normal</div>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card humidity">
+                        <div class="sensor-icon">💧</div>
+                        <div class="sensor-info">
+                            <h4>Humidity</h4>
+                            <div class="sensor-value" id="humidity">--%</div>
+                            <div class="sensor-trend" id="humTrend">Normal</div>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card smoke">
+                        <div class="sensor-icon">💨</div>
+                        <div class="sensor-info">
+                            <h4>Smoke Level</h4>
+                            <div class="sensor-value" id="smoke">-- ppm</div>
+                            <div class="sensor-trend" id="smokeTrend">Normal</div>
+                        </div>
+                    </div>
+
+                    <div class="sensor-card gas">
+                        <div class="sensor-icon">⚠️</div>
+                        <div class="sensor-info">
+                            <h4>Gas Level</h4>
+                            <div class="sensor-value" id="gas">-- ppm</div>
+                            <div class="sensor-trend" id="gasTrend">Normal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Raw Data Display -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h2>📋 Raw Data</h2>
+                    <button class="btn-secondary" onclick="clearRawData()">Clear</button>
+                </div>
+                <div class="raw-data-container">
+                    <div class="raw-data" id="rawData">
+                        <div class="no-data">No data received yet...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Section -->
+            <div class="control-section">
+                <div class="section-header">
+                    <h2>🎛️ Emergency Controls</h2>
+                </div>
+                
+                <div class="control-grid">
+                    <div class="control-card">
+                        <div class="control-header">
+                            <span class="control-icon">🧯</span>
+                            <h3>Fire Extinguisher</h3>
+                        </div>
+                        <div class="control-content">
+                            <p>Deploy emergency fire suppression system</p>
+                            <form action="/deploy" method="POST" class="deploy-form">
+                                <button type="submit" class="btn-danger" id="deployBtn">
+                                    <span class="btn-icon">🚨</span>
+                                    Deploy Fire Extinguisher
+                                </button>
+                            </form>
+                            <div class="warning-text">
+                                ⚠️ This action will immediately deploy the fire suppression system
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-card">
+                        <div class="control-header">
+                            <span class="control-icon">📢</span>
+                            <h3>Alert System</h3>
+                        </div>
+                        <div class="control-content">
+                            <p>Manual alert system controls</p>
+                            <div class="control-buttons">
+                                <button class="btn-warning" onclick="testAlert()">Test Alert</button>
+                                <button class="btn-secondary" onclick="silenceAlert()">Silence</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 Forest Fire Detection System | ESP32 LoRa Gateway</p>
+                <div class="footer-links">
+                    <span>Last Updated: <span id="lastUpdate">Loading...</span></span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

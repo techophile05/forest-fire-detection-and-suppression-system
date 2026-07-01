@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs - Forest Fire Detection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌲</span>
+                    <h1>Forest Fire Detection System</h1>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">Dashboard</a>
+                    <a href="#" class="nav-link active">Logs</a>
+                    <a href="settings.html" class="nav-link">Settings</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="page-header">
+                <h2>📋 System Logs</h2>
+                <p>Monitor system events and sensor data history</p>
+            </div>
+
+            <!-- Log Controls -->
+            <div class="log-controls">
+                <div class="control-group">
+                    <label for="logLevel">Filter by Level:</label>
+                    <select id="logLevel" onchange="filterLogs()">
+                        <option value="all">All Logs</option>
+                        <option value="error">Errors Only</option>
+                        <option value="warning">Warnings</option>
+                        <option value="info">Info</option>
+                        <option value="debug">Debug</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="dateRange">Date Range:</label>
+                    <select id="dateRange" onchange="filterLogs()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+                <div class="control-buttons">
+                    <button class="btn-secondary" onclick="refreshLogs()">🔄 Refresh</button>
+                    <button class="btn-secondary" onclick="exportLogs()">💾 Export</button>
+                    <button class="btn-warning" onclick="clearLogs()">🗑️ Clear</button>
+                </div>
+            </div>
+
+            <!-- Log Statistics -->
+            <div class="log-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🚨</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="errorCount">12</div>
+                        <div class="stat-label">Errors</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="warningCount">45</div>
+                        <div class="stat-label">Warnings</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">ℹ️</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="infoCount">234</div>
+                        <div class="stat-label">Info</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalCount">291</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Display -->
+            <div class="log-container">
+                <div class="log-header">
+                    <h3>Recent Events</h3>
+                    <div class="auto-scroll-toggle">
+                        <label>
+                            <input type="checkbox" id="autoScroll" checked>
+                            Auto-scroll to new logs
+                        </label>
+                    </div>
+                </div>
+                <div class="log-content" id="logContent">
+                    <!-- Logs will be populated here -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 Forest Fire Detection System | ESP32 LoRa Gateway</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Sample log data - replace with actual data from ESP32
+        let logs = [
+            {
+                timestamp: new Date('2024-01-25T10:30:15'),
+                level: 'info',
+                message: 'System startup completed successfully',
+                source: 'SYSTEM'
+            },
+            {
+                timestamp: new Date('2024-01-25T10:31:22'),
+                level: 'info',
+                message: 'WiFi connected to "Jio Fiber"',
+                source: 'NETWORK'
+            },
+            {
+                timestamp: new Date('2024-01-25T10:31:45'),
+                level: 'info',
+                message: 'LoRa initialized on 433MHz',
+                source: 'LORA'
+            },
+            {
+                timestamp: new Date('2024-01-25T10:32:00'),
+                level: 'info',
+                message: 'Web server started on port 80',
+                source: 'WEBSERVER'
+            },
+            {
+                timestamp: new Date('2024-01-25T10:35:12'),
+                level: 'info',
+                message: 'First sensor node connected',
+                source: 'SENSOR'
+            },
+            {
+                timestamp: new Date('2024-01-25T10:36:00'),
+                level: 'info',
+                message: 'Received data: Temp:24.5,Hum:65.2,Smoke:12,Gas:45',
+                source: 'DATA'
+            },
+            {
+                timestamp: new Date('2024-01-25T11:15:30'),
+                level: 'warning',
+                message: 'Temperature elevated: 32°C (Threshold: 35°C)',
+                source: 'ALERT'
+            },
+            {
+                timestamp: new Date('2024-01-25T11:45:00'),
+                level: 'warning',
+                message: 'Low humidity detected: 28% (Threshold: 30%)',
+                source: 'ALERT'
+            },
+            {
+                timestamp: new Date('2024-01-25T12:00:00'),
+                level: 'error',
+                message: 'Sensor node timeout - no data received for 20 seconds',
+                source: 'SENSOR'
+            },
+            {
+                timestamp: new Date('2024-01-25T12:01:15'),
+                level: 'info',
+                message: 'Sensor node reconnected',
+                source: 'SENSOR'
+            },
+            {
+                timestamp: new Date('2024-01-25T12:30:45'),
+                level: 'warning',
+                message: 'Smoke level elevated: 65 ppm (Threshold: 50 ppm)',
+                source: 'ALERT'
+            },
+            {
+                timestamp: new Date('2024-01-25T13:00:00'),
+                level: 'error',
+                message: 'CRITICAL: Multiple fire risk indicators detected!',
+                source: 'FIRE_RISK'
+            },
+            {
+                timestamp: new Date('2024-01-25T13:00:05'),
+                level: 'info',
+                message: 'Fire suppression system deployed',
+                source: 'SUPPRESSION'
+            },
+            {
+                timestamp: new Date('2024-01-25T13:15:00'),
+                level: 'info',
+                message: 'Fire risk levels returning to normal',
+                source: 'ALERT'
+            },
+            {
+                timestamp: new Date('2024-01-25T14:00:00'),
+                level: 'debug',
+                message: 'Memory usage: 156KB free, 92KB used',
+                source: 'SYSTEM'
+            }
+        ];
+
+        let filteredLogs = [...logs];
+
+        function renderLogs() {
+            const logContent = document.getElementById('logContent');
+            const autoScroll = document.getElementById('autoScroll').checked;
+            const shouldScroll = autoScroll && (logContent.scrollTop >= logContent.scrollHeight - logContent.clientHeight - 50);
+
+            logContent.innerHTML = filteredLogs.map(log => {
+                const levelClass = `log-${log.level}`;
+                const timeStr = log.timestamp.toLocaleTimeString();
+                const dateStr = log.timestamp.toLocaleDateString();
+                
+                return `
+                    <div class="log-entry ${levelClass}">
+                        <div class="log-time">[${dateStr} ${timeStr}]</div>
+                        <div class="log-level">${log.level.toUpperCase()}</div>
+                        <div class="log-source">${log.source}</div>
+                        <div class="log-message">${log.message}</div>
+                    </div>
+                `;
+            }).join('');
+
+            if (shouldScroll) {
+                logContent.scrollTop = logContent.scrollHeight;
+            }
+
+            updateLogStats();
+        }
+
+        function updateLogStats() {
+            const stats = filteredLogs.reduce((acc, log) => {
+                acc[log.level] = (acc[log.level] || 0) + 1;
+                acc.total++;
+                return acc;
+            }, { error: 0, warning: 0, info: 0, debug: 0, total: 0 });
+
+            document.getElementById('errorCount').textContent = stats.error;
+            document.getElementById('warningCount').textContent = stats.warning;
+            document.getElementById('infoCount').textContent = stats.info + stats.debug;
+            document.getElementById('totalCount').textContent = stats.total;
+        }
+
+        function filterLogs() {
+            const levelFilter = document.getElementById('logLevel').value;
+            const dateFilter = document.getElementById('dateRange').value;
+            const now = new Date();
+
+            let startDate = new Date(0); // Beginning of time
+            if (dateFilter === 'today') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            } else if (dateFilter === 'week') {
+                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            } else if (dateFilter === 'month') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            }
+
+            filteredLogs = logs.filter(log => {
+                const levelMatch = levelFilter === 'all' || log.level === levelFilter;
+                const dateMatch = log.timestamp >= startDate;
+                return levelMatch && dateMatch;
+            });
+
+            filteredLogs.sort((a, b) => b.timestamp - a.timestamp);
+            renderLogs();
+        }
+
+        function refreshLogs() {
+            // In real implementation, fetch new logs from ESP32
+            // For demo, add a new log entry
+            const newLog = {
+                timestamp: new Date(),
+                level: 'info',
+                message: `System status check completed - ${logs.length + 1} total events`,
+                source: 'SYSTEM'
+            };
+            logs.unshift(newLog);
+            filterLogs();
+        }
+
+        function exportLogs() {
+            const dataStr = filteredLogs.map(log => 
+                `${log.timestamp.toISOString()}\t${log.level.toUpperCase()}\t${log.source}\t${log.message}`
+            ).join('\n');
+            
+            const header = 'Timestamp\tLevel\tSource\tMessage\n';
+            const fullData = header + dataStr;
+            
+            const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(fullData);
+            const filename = `forest-fire-logs-${new Date().toISOString().split('T')[0]}.txt`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', filename);
+            linkElement.click();
+        }
+
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
+                logs = [];
+                filteredLogs = [];
+                renderLogs();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLogs();
+            
+            // Auto-refresh logs every 10 seconds
+            setInterval(refreshLogs, 10000);
+        });
+    </script>
+
+    <style>
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-header h2 {
+            font-size: 28px;
+            margin: 0 0 10px;
+        }
+        .page-header p {
+            color: var(--muted);
+            margin: 0;
+        }
+        
+        .log-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-group label {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .control-group select {
+            padding: 6px 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            background: rgba(0,0,0,0.2);
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .log-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .stat-icon {
+            font-size: 24px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        
+        .log-container {
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+        }
+        
+        .log-header h3 {
+            margin: 0;
+            color: var(--text);
+        }
+        
+        .auto-scroll-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .log-content {
+            height: 500px;
+            overflow-y: auto;
+            font-family: ui-monospace, Menlo, Monaco, "Cascadia Code", Consolas, "Liberation Mono", monospace;
+            font-size: 13px;
+        }
+        
+        .log-entry {
+            display: grid;
+            grid-template-columns: 180px 80px 100px 1fr;
+            gap: 15px;
+            padding: 8px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            align-items: center;
+        }
+        
+        .log-entry:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .log-time {
+            color: var(--muted);
+            font-size: 12px;
+        }
+        
+        .log-level {
+            font-weight: 600;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .log-source {
+            color: var(--link);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .log-message {
+            color: var(--text);
+        }
+        
+        .log-error .log-level {
+            background: rgba(231, 76, 60, 0.2);
+            color: #ff6b6b;
+        }
+        
+        .log-warning .log-level {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+        
+        .log-info .log-level {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+        
+        .log-debug .log-level {
+            background: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+        
+        @media (max-width: 1000px) {
+            .log-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .log-entry {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .log-stats {
+                grid-template-columns: 1fr;
+            }
+            .log-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .control-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</body>
+</html>
