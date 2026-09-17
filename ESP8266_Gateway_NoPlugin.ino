@@ -272,7 +272,7 @@ const char* htmlPage = R"rawliteral(
                 .then(response => response.json())
                 .then(data => {
                     // Update gateway info
-                    document.getElementById('gatewayIP').textContent = data.gateway_ip || '10.118.178.118';
+                    document.getElementById('gatewayIP').textContent = data.gateway_ip || '10.221.104.108';
                     
                     // Update uptime
                     const uptimeSeconds = Math.floor(data.uptime / 1000);

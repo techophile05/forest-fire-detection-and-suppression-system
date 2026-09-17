@@ -1,4 +1,4 @@
-/* Forest Fire Detection System - Frontend Styles */
+/* Forest Fire Detection System - Frontend Styles
 :root {
   --bg: #0b1d10;
   --bg2: #122818;
@@ -144,7 +144,7 @@ body {
   0% { transform: scale(0.9); opacity: 0.7; }
   50% { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(0.9); opacity: 0.7; }
-}
+} */
 
 /* Responsive */
 @media (max-width: 1000px) { .status-grid { grid-template-columns: 1fr 1fr; } .sensor-grid { grid-template-columns: 1fr 1fr; } }

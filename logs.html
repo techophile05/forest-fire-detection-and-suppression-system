@@ -1,525 +1,828 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Logs - Forest Fire Detection</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart EcoGuard — Logs</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    :root {
+      --bg: #171310;
+      --panel: #211b16;
+      --panel-2: #2a2119;
+      --line: rgba(202, 191, 174, 0.12);
+      --ash: #cabfae;
+      --ash-dim: #8a8072;
+      --text-main: #f2ece0;
+      --ember: #ff6a2b;
+      --ember-dim: rgba(255, 106, 43, 0.12);
+      --safe: #6fae66;
+      --safe-dim: rgba(111, 174, 102, 0.15);
+      --warn: #e0a83e;
+      --warn-dim: rgba(224, 168, 62, 0.15);
+      --danger: #d1453b;
+      --danger-dim: rgba(209, 69, 59, 0.18);
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ash);
+      font-family: var(--font-body);
+    }
+
+    /* LAYOUT */
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 28px 60px;
+    }
+
+    /* HEADER */
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: var(--ember-dim);
+      border: 1px solid rgba(255, 106, 43, 0.2);
+      border-radius: 9px;
+      font-size: 1.25rem;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .brand-sub {
+      font-size: 0.68rem;
+      color: var(--ash-dim);
+      letter-spacing: 0.01em;
+    }
+
+    nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    nav a {
+      padding: 8px 15px;
+      color: var(--ash-dim);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-radius: 7px;
+      transition: 0.15s ease;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+      background: var(--panel);
+    }
+
+    nav a.active {
+      color: var(--ember);
+      background: var(--panel);
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      background: var(--safe-dim);
+      border: 1px solid rgba(111, 174, 102, 0.2);
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--safe);
+      letter-spacing: 0.04em;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--safe);
+      box-shadow: 0 0 8px rgba(111, 174, 102, 0.6);
+    }
+
+    /*  MAIN  */
+
+    main {
+      margin-top: 32px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h2 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .page-heading p {
+      margin-top: 5px;
+      font-size: 0.78rem;
+      color: var(--ash-dim);
+    }
+
+    /* STATS */
+
+    .log-stats {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 15px 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .log-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--ash-dim);
+    }
+
+    .log-stat strong {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    /* TOOLBAR */
+
+    .logs-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel-2);
+      color: var(--ash-dim);
+      font-family: var(--font-body);
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--text-main);
+      border-color: rgba(202, 191, 174, 0.25);
+    }
+
+    .filter-btn.active {
+      color: var(--ember);
+      border-color: rgba(255, 106, 43, 0.55);
+      background: var(--ember-dim);
+    }
+
+    .filter-btn[data-filter="normal"].active {
+      color: var(--safe);
+      border-color: rgba(111, 174, 102, 0.45);
+      background: var(--safe-dim);
+    }
+
+    .filter-btn[data-filter="warn"].active {
+      color: var(--warn);
+      border-color: rgba(224, 168, 62, 0.45);
+      background: var(--warn-dim);
+    }
+
+    .filter-btn[data-filter="fire"].active {
+      color: var(--danger);
+      border-color: rgba(209, 69, 59, 0.45);
+      background: var(--danger-dim);
+    }
+
+    .logs-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-2);
+      color: var(--ash);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .action-btn:hover {
+      color: var(--text-main);
+      background: #31271e;
+      border-color: rgba(202, 191, 174, 0.22);
+    }
+
+    .action-btn.primary:hover {
+      color: var(--ember);
+      border-color: rgba(255, 106, 43, 0.4);
+      background: var(--ember-dim);
+    }
+
+    .action-btn.danger:hover {
+      color: var(--danger);
+      border-color: rgba(209, 69, 59, 0.4);
+      background: var(--danger-dim);
+    }
+
+    /* TABLE */
+
+    .log-table-wrap {
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .log-table thead {
+      background: var(--panel-2);
+    }
+
+    .log-table th {
+      padding: 12px 16px;
+      text-align: left;
+      color: var(--ash-dim);
+      font-family: var(--font-mono);
+      font-size: 0.63rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .log-table td {
+      padding: 13px 16px;
+      color: var(--ash);
+      border-bottom: 1px solid var(--line);
+      transition: background 0.15s ease;
+    }
+
+    .log-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .log-table tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .log-table td.time {
+      width: 180px;
+      color: var(--ash-dim);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .log-table td.node {
+      width: 110px;
+      color: var(--ash);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .log-table td.event {
+      color: var(--text-main);
+    }
+
+    /* TAGS */
+
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.61rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .tag.normal {
+      color: var(--safe);
+      background: var(--safe-dim);
+      border: 1px solid rgba(111, 174, 102, 0.18);
+    }
+
+    .tag.warn {
+      color: var(--warn);
+      background: var(--warn-dim);
+      border: 1px solid rgba(224, 168, 62, 0.18);
+    }
+
+    .tag.fire {
+      color: var(--danger);
+      background: var(--danger-dim);
+      border: 1px solid rgba(209, 69, 59, 0.2);
+    }
+
+    /*  EMPTY STATE */
+
+    .log-empty {
+      display: none;
+      text-align: center;
+      padding: 55px 20px;
+      color: var(--ash-dim);
+    }
+
+    .empty-icon {
+      font-size: 2rem;
+      opacity: 0.45;
+      margin-bottom: 10px;
+    }
+
+    .log-empty p {
+      font-size: 0.82rem;
+    }
+
+    /* FOOTER */
+
+    footer {
+      margin-top: 38px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 0.72rem;
+      color: var(--ash-dim);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 760px) {
+      .wrap {
+        padding: 0 16px 50px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      nav {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      nav a {
+        padding: 7px 11px;
+      }
+
+      .system-status {
+        display: none;
+      }
+
+      .log-stats {
+        gap: 15px 22px;
+      }
+
+      .logs-toolbar {
+        align-items: flex-start;
+      }
+
+      .logs-actions {
+        width: 100%;
+      }
+
+      .action-btn {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .log-table-wrap {
+        overflow-x: auto;
+      }
+
+      .log-table {
+        min-width: 680px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-sub {
+        display: none;
+      }
+
+      .page-heading h2 {
+        font-size: 1.35rem;
+      }
+
+      .log-stats {
+        padding: 13px;
+      }
+
+      .log-stat {
+        font-size: 0.7rem;
+      }
+
+      .log-stat strong {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">🌲</span>
-                    <h1>Forest Fire Detection System</h1>
-                </div>
-                <nav class="nav">
-                    <a href="index.html" class="nav-link">Dashboard</a>
-                    <a href="#" class="nav-link active">Logs</a>
-                    <a href="settings.html" class="nav-link">Settings</a>
-                    <a href="about.html" class="nav-link">About</a>
-                </nav>
-            </div>
-        </header>
 
-        <main class="main">
-            <div class="page-header">
-                <h2>📋 System Logs</h2>
-                <p>Monitor system events and sensor data history</p>
-            </div>
+  <div class="wrap">
 
-            <!-- Log Controls -->
-            <div class="log-controls">
-                <div class="control-group">
-                    <label for="logLevel">Filter by Level:</label>
-                    <select id="logLevel" onchange="filterLogs()">
-                        <option value="all">All Logs</option>
-                        <option value="error">Errors Only</option>
-                        <option value="warning">Warnings</option>
-                        <option value="info">Info</option>
-                        <option value="debug">Debug</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="dateRange">Date Range:</label>
-                    <select id="dateRange" onchange="filterLogs()">
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                        <option value="all">All Time</option>
-                    </select>
-                </div>
-                <div class="control-buttons">
-                    <button class="btn-secondary" onclick="refreshLogs()">🔄 Refresh</button>
-                    <button class="btn-secondary" onclick="exportLogs()">💾 Export</button>
-                    <button class="btn-warning" onclick="clearLogs()">🗑️ Clear</button>
-                </div>
-            </div>
+    <!-- HEADER -->
 
-            <!-- Log Statistics -->
-            <div class="log-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">🚨</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="errorCount">12</div>
-                        <div class="stat-label">Errors</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⚠️</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="warningCount">45</div>
-                        <div class="stat-label">Warnings</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">ℹ️</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="infoCount">234</div>
-                        <div class="stat-label">Info</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="totalCount">291</div>
-                        <div class="stat-label">Total</div>
-                    </div>
-                </div>
-            </div>
+    <header class="topbar">
 
-            <!-- Log Display -->
-            <div class="log-container">
-                <div class="log-header">
-                    <h3>Recent Events</h3>
-                    <div class="auto-scroll-toggle">
-                        <label>
-                            <input type="checkbox" id="autoScroll" checked>
-                            Auto-scroll to new logs
-                        </label>
-                    </div>
-                </div>
-                <div class="log-content" id="logContent">
-                    <!-- Logs will be populated here -->
-                </div>
-            </div>
-        </main>
+      <a href="/" class="brand">
+        <span class="brand-mark">🌲</span>
 
-        <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2024 Forest Fire Detection System | ESP32 LoRa Gateway</p>
-            </div>
-        </footer>
-    </div>
+        <span class="brand-text">
+          <span class="brand-name">Smart EcoGuard</span>
 
-    <script>
-        // Sample log data - replace with actual data from ESP32
-        let logs = [
-            {
-                timestamp: new Date('2024-01-25T10:30:15'),
-                level: 'info',
-                message: 'System startup completed successfully',
-                source: 'SYSTEM'
-            },
-            {
-                timestamp: new Date('2024-01-25T10:31:22'),
-                level: 'info',
-                message: 'WiFi connected to "Jio Fiber"',
-                source: 'NETWORK'
-            },
-            {
-                timestamp: new Date('2024-01-25T10:31:45'),
-                level: 'info',
-                message: 'LoRa initialized on 433MHz',
-                source: 'LORA'
-            },
-            {
-                timestamp: new Date('2024-01-25T10:32:00'),
-                level: 'info',
-                message: 'Web server started on port 80',
-                source: 'WEBSERVER'
-            },
-            {
-                timestamp: new Date('2024-01-25T10:35:12'),
-                level: 'info',
-                message: 'First sensor node connected',
-                source: 'SENSOR'
-            },
-            {
-                timestamp: new Date('2024-01-25T10:36:00'),
-                level: 'info',
-                message: 'Received data: Temp:24.5,Hum:65.2,Smoke:12,Gas:45',
-                source: 'DATA'
-            },
-            {
-                timestamp: new Date('2024-01-25T11:15:30'),
-                level: 'warning',
-                message: 'Temperature elevated: 32°C (Threshold: 35°C)',
-                source: 'ALERT'
-            },
-            {
-                timestamp: new Date('2024-01-25T11:45:00'),
-                level: 'warning',
-                message: 'Low humidity detected: 28% (Threshold: 30%)',
-                source: 'ALERT'
-            },
-            {
-                timestamp: new Date('2024-01-25T12:00:00'),
-                level: 'error',
-                message: 'Sensor node timeout - no data received for 20 seconds',
-                source: 'SENSOR'
-            },
-            {
-                timestamp: new Date('2024-01-25T12:01:15'),
-                level: 'info',
-                message: 'Sensor node reconnected',
-                source: 'SENSOR'
-            },
-            {
-                timestamp: new Date('2024-01-25T12:30:45'),
-                level: 'warning',
-                message: 'Smoke level elevated: 65 ppm (Threshold: 50 ppm)',
-                source: 'ALERT'
-            },
-            {
-                timestamp: new Date('2024-01-25T13:00:00'),
-                level: 'error',
-                message: 'CRITICAL: Multiple fire risk indicators detected!',
-                source: 'FIRE_RISK'
-            },
-            {
-                timestamp: new Date('2024-01-25T13:00:05'),
-                level: 'info',
-                message: 'Fire suppression system deployed',
-                source: 'SUPPRESSION'
-            },
-            {
-                timestamp: new Date('2024-01-25T13:15:00'),
-                level: 'info',
-                message: 'Fire risk levels returning to normal',
-                source: 'ALERT'
-            },
-            {
-                timestamp: new Date('2024-01-25T14:00:00'),
-                level: 'debug',
-                message: 'Memory usage: 156KB free, 92KB used',
-                source: 'SYSTEM'
-            }
-        ];
+          <span class="brand-sub">
+            AI-IoT Forest Fire Detection &amp; Suppression
+          </span>
+        </span>
+      </a>
 
-        let filteredLogs = [...logs];
+      <nav>
+        <a href="/">Dashboard</a>
+        <a href="logs.html" class="active">Logs</a>
+        <a href="settings.html">Settings</a>
+        <a href="about.html">About</a>
+      </nav>
 
-        function renderLogs() {
-            const logContent = document.getElementById('logContent');
-            const autoScroll = document.getElementById('autoScroll').checked;
-            const shouldScroll = autoScroll && (logContent.scrollTop >= logContent.scrollHeight - logContent.clientHeight - 50);
+      <div class="system-status" id="logConnStatus">
+        <span class="status-dot" id="logStatusDot"></span>
+        <span id="logStatusText">Connecting…</span>
+      </div>
 
-            logContent.innerHTML = filteredLogs.map(log => {
-                const levelClass = `log-${log.level}`;
-                const timeStr = log.timestamp.toLocaleTimeString();
-                const dateStr = log.timestamp.toLocaleDateString();
-                
-                return `
-                    <div class="log-entry ${levelClass}">
-                        <div class="log-time">[${dateStr} ${timeStr}]</div>
-                        <div class="log-level">${log.level.toUpperCase()}</div>
-                        <div class="log-source">${log.source}</div>
-                        <div class="log-message">${log.message}</div>
-                    </div>
-                `;
-            }).join('');
+    </header>
 
-            if (shouldScroll) {
-                logContent.scrollTop = logContent.scrollHeight;
-            }
 
-            updateLogStats();
+    <!-- MAIN -->
+
+    <main>
+
+      <div class="page-heading">
+        <h2>System Logs</h2>
+        <p>Real-time telemetry and event history from EcoGuard Node 1.</p>
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="log-stats">
+
+        <div class="log-stat">
+          <strong id="statTotal">0</strong>
+          <span>Total Logs</span>
+        </div>
+
+        <div class="log-stat">
+          <strong id="statNormal">0</strong>
+          <span>Normal</span>
+        </div>
+
+        <div class="log-stat">
+          <strong id="statWarn">0</strong>
+          <span>Alerts</span>
+        </div>
+
+        <div class="log-stat">
+          <strong id="statFire">0</strong>
+          <span>Fire Events</span>
+        </div>
+
+      </div>
+
+
+      <!-- TOOLBAR -->
+
+      <div class="logs-toolbar">
+
+        <div class="filter-group">
+
+          <button class="filter-btn active" data-filter="all">
+            All
+          </button>
+
+          <button class="filter-btn" data-filter="normal">
+            Normal
+          </button>
+
+          <button class="filter-btn" data-filter="warn">
+            Alert
+          </button>
+
+          <button class="filter-btn" data-filter="fire">
+            Fire
+          </button>
+
+        </div>
+
+
+        <div class="logs-actions">
+
+          <button class="action-btn primary" id="exportBtn">
+            ↓
+            Export CSV
+          </button>
+
+          <button class="action-btn danger" id="clearBtn">
+            ×
+            Clear Logs
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOG TABLE -->
+
+      <div class="log-table-wrap">
+
+        <table class="log-table">
+
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Node</th>
+              <th>Event</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+
+          <tbody id="logBody"></tbody>
+
+        </table>
+
+
+        <div class="log-empty" id="logEmpty">
+
+          <div class="empty-icon">📄</div>
+
+          <p>No log entries to display.</p>
+
+        </div>
+
+      </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+      Smart EcoGuard · AI-IoT Forest Fire Detection &amp; Suppression System
+    </footer>
+
+  </div>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:8080' : '';
+    const POLL_MS = 4000;
+    const MAX_LOGS = 200;
+
+    let logs = [];
+    let currentFilter = 'all';
+    let lastFingerprint = '';
+
+    function fmt(value, unit) {
+      if (value === null || value === undefined) {
+        return 'N/A';
+      }
+      return Number(value).toFixed(1) + unit;
+    }
+
+    function pushLog(level, msg, node) {
+      logs.unshift({
+        time: new Date().toLocaleTimeString(),
+        node: node || 'gateway',
+        msg: msg,
+        level: level
+      });
+      if (logs.length > MAX_LOGS) {
+        logs.pop();
+      }
+    }
+
+    function renderLogs() {
+      const body = document.getElementById('logBody');
+      const empty = document.getElementById('logEmpty');
+      const filtered = currentFilter === 'all'
+        ? logs
+        : logs.filter(function (log) { return log.level === currentFilter; });
+      const visibleLogs = filtered.slice(0, 60);
+
+      if (visibleLogs.length === 0) {
+        body.innerHTML = '';
+        empty.style.display = 'block';
+      } else {
+        empty.style.display = 'none';
+        body.innerHTML = visibleLogs.map(function (log) {
+          return '<tr>' +
+            '<td class="time">' + log.time + '</td>' +
+            '<td class="node">' + log.node + '</td>' +
+            '<td class="event">' + log.msg + '</td>' +
+            '<td><span class="tag ' + log.level + '">' + log.level + '</span></td>' +
+            '</tr>';
+        }).join('');
+      }
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = logs.length;
+      document.getElementById('statNormal').textContent = logs.filter(function (log) { return log.level === 'normal'; }).length;
+      document.getElementById('statWarn').textContent = logs.filter(function (log) { return log.level === 'warn'; }).length;
+      document.getElementById('statFire').textContent = logs.filter(function (log) { return log.level === 'fire'; }).length;
+    }
+
+    function setConnStatus(label, online) {
+      const text = document.getElementById('logStatusText');
+      const wrap = document.getElementById('logConnStatus');
+      if (text) text.textContent = label;
+      if (wrap) wrap.setAttribute('data-online', online ? '1' : '0');
+    }
+
+    function ingest(payload) {
+      const esp = payload.esp || {};
+      const sensors = payload.sensors || {};
+      const risk = payload.risk || {};
+      const ml = payload.ml || {};
+      const node = payload.node_id || 'gateway';
+
+      let conn = 'ESP ONLINE';
+      if (!esp.reachable) conn = 'ESP OFFLINE';
+      else if (esp.stale) conn = 'STALE DATA';
+      setConnStatus(conn, !!(esp.reachable && !esp.stale));
+
+      const fingerprint = [
+        sensors.temperature, sensors.humidity, sensors.pressure, sensors.mq4,
+        risk.score, ml.prediction, conn
+      ].join('|');
+
+      if (fingerprint === lastFingerprint) {
+        return;
+      }
+      lastFingerprint = fingerprint;
+
+      if (!esp.reachable) {
+        pushLog('warn', 'ESP OFFLINE — no live telemetry', node);
+      } else if (esp.stale) {
+        pushLog('warn', 'STALE DATA — last successful reading ' + (payload.last_successful_reading || 'unknown'), node);
+      } else {
+        const pred = (ml.prediction === null || ml.prediction === undefined) ? 'N/A' : ml.prediction;
+        const score = (risk.score === null || risk.score === undefined) ? 'N/A' : risk.score + '/100';
+        pushLog(
+          (ml.prediction === 'Confirmed Fire' || (risk.score != null && risk.score >= 75)) ? 'fire'
+            : (ml.prediction === 'Potential Fire' || (risk.score != null && risk.score >= 35)) ? 'warn'
+            : 'normal',
+          'T=' + fmt(sensors.temperature, '°C') +
+            ' H=' + fmt(sensors.humidity, '%') +
+            ' P=' + fmt(sensors.pressure, 'hPa') +
+            ' MQ-4=' + fmt(sensors.mq4 != null ? sensors.mq4 : sensors.gas, '') +
+            ' · Risk ' + score +
+            ' · Prediction ' + pred,
+          node
+        );
+      }
+      renderLogs();
+    }
+
+    async function poll() {
+      try {
+        const response = await fetch(API_BASE + '/api/data', { cache: 'no-store' });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        ingest(await response.json());
+      } catch (err) {
+        setConnStatus('ESP OFFLINE', false);
+        const fingerprint = 'backend-unreachable';
+        if (fingerprint !== lastFingerprint) {
+          lastFingerprint = fingerprint;
+          pushLog('warn', 'Backend unreachable — ' + err.message, 'backend');
+          renderLogs();
         }
+      }
+    }
 
-        function updateLogStats() {
-            const stats = filteredLogs.reduce((acc, log) => {
-                acc[log.level] = (acc[log.level] || 0) + 1;
-                acc.total++;
-                return acc;
-            }, { error: 0, warning: 0, info: 0, debug: 0, total: 0 });
-
-            document.getElementById('errorCount').textContent = stats.error;
-            document.getElementById('warningCount').textContent = stats.warning;
-            document.getElementById('infoCount').textContent = stats.info + stats.debug;
-            document.getElementById('totalCount').textContent = stats.total;
-        }
-
-        function filterLogs() {
-            const levelFilter = document.getElementById('logLevel').value;
-            const dateFilter = document.getElementById('dateRange').value;
-            const now = new Date();
-
-            let startDate = new Date(0); // Beginning of time
-            if (dateFilter === 'today') {
-                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            } else if (dateFilter === 'week') {
-                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            } else if (dateFilter === 'month') {
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-            }
-
-            filteredLogs = logs.filter(log => {
-                const levelMatch = levelFilter === 'all' || log.level === levelFilter;
-                const dateMatch = log.timestamp >= startDate;
-                return levelMatch && dateMatch;
-            });
-
-            filteredLogs.sort((a, b) => b.timestamp - a.timestamp);
-            renderLogs();
-        }
-
-        function refreshLogs() {
-            // In real implementation, fetch new logs from ESP32
-            // For demo, add a new log entry
-            const newLog = {
-                timestamp: new Date(),
-                level: 'info',
-                message: `System status check completed - ${logs.length + 1} total events`,
-                source: 'SYSTEM'
-            };
-            logs.unshift(newLog);
-            filterLogs();
-        }
-
-        function exportLogs() {
-            const dataStr = filteredLogs.map(log => 
-                `${log.timestamp.toISOString()}\t${log.level.toUpperCase()}\t${log.source}\t${log.message}`
-            ).join('\n');
-            
-            const header = 'Timestamp\tLevel\tSource\tMessage\n';
-            const fullData = header + dataStr;
-            
-            const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(fullData);
-            const filename = `forest-fire-logs-${new Date().toISOString().split('T')[0]}.txt`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', filename);
-            linkElement.click();
-        }
-
-        function clearLogs() {
-            if (confirm('Are you sure you want to clear all logs? This action cannot be undone.')) {
-                logs = [];
-                filteredLogs = [];
-                renderLogs();
-            }
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            renderLogs();
-            
-            // Auto-refresh logs every 10 seconds
-            setInterval(refreshLogs, 10000);
+    document.querySelectorAll('.filter-btn').forEach(function (button) {
+      button.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(function (btn) {
+          btn.classList.remove('active');
         });
-    </script>
+        button.classList.add('active');
+        currentFilter = button.dataset.filter;
+        renderLogs();
+      });
+    });
 
-    <style>
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .page-header h2 {
-            font-size: 28px;
-            margin: 0 0 10px;
-        }
-        .page-header p {
-            color: var(--muted);
-            margin: 0;
-        }
-        
-        .log-controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .control-group label {
-            color: var(--muted);
-            font-size: 14px;
-        }
-        
-        .control-group select {
-            padding: 6px 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 6px;
-            background: rgba(0,0,0,0.2);
-            color: var(--text);
-            font-size: 14px;
-        }
-        
-        .control-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .log-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 15px;
-        }
-        
-        .stat-icon {
-            font-size: 24px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: var(--muted);
-        }
-        
-        .log-container {
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .log-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
-        }
-        
-        .log-header h3 {
-            margin: 0;
-            color: var(--text);
-        }
-        
-        .auto-scroll-toggle {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--muted);
-            font-size: 14px;
-        }
-        
-        .log-content {
-            height: 500px;
-            overflow-y: auto;
-            font-family: ui-monospace, Menlo, Monaco, "Cascadia Code", Consolas, "Liberation Mono", monospace;
-            font-size: 13px;
-        }
-        
-        .log-entry {
-            display: grid;
-            grid-template-columns: 180px 80px 100px 1fr;
-            gap: 15px;
-            padding: 8px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            align-items: center;
-        }
-        
-        .log-entry:hover {
-            background: rgba(255,255,255,0.03);
-        }
-        
-        .log-time {
-            color: var(--muted);
-            font-size: 12px;
-        }
-        
-        .log-level {
-            font-weight: 600;
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-align: center;
-        }
-        
-        .log-source {
-            color: var(--link);
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
-        .log-message {
-            color: var(--text);
-        }
-        
-        .log-error .log-level {
-            background: rgba(231, 76, 60, 0.2);
-            color: #ff6b6b;
-        }
-        
-        .log-warning .log-level {
-            background: rgba(243, 156, 18, 0.2);
-            color: #f39c12;
-        }
-        
-        .log-info .log-level {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-        }
-        
-        .log-debug .log-level {
-            background: rgba(155, 89, 182, 0.2);
-            color: #9b59b6;
-        }
-        
-        @media (max-width: 1000px) {
-            .log-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .log-entry {
-                grid-template-columns: 1fr;
-                gap: 5px;
-            }
-        }
-        
-        @media (max-width: 640px) {
-            .log-stats {
-                grid-template-columns: 1fr;
-            }
-            .log-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .control-buttons {
-                justify-content: center;
-            }
-        }
-    </style>
+    document.getElementById('clearBtn').addEventListener('click', function () {
+      logs = [];
+      lastFingerprint = '';
+      renderLogs();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', function () {
+      if (logs.length === 0) return;
+      const csvRows = [['Time', 'Node', 'Event', 'Level'].join(',')];
+      logs.forEach(function (log) {
+        const safeMsg = '"' + log.msg.replace(/"/g, '""') + '"';
+        csvRows.push([log.time, log.node, safeMsg, log.level].join(','));
+      });
+      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'smart-ecoguard-logs.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    renderLogs();
+    poll();
+    setInterval(poll, POLL_MS);
+</script>
+
 </body>
+
 </html>

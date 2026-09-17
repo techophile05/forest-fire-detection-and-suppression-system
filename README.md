@@ -22,23 +22,27 @@ A modern, responsive web dashboard for the ESP32 LoRa Gateway Forest Fire Detect
 2. Update the ESP32 code to serve these files
 3. Access via ESP32's IP address
 
-### Option 2: Local Development
-1. Extract all files to a local directory
-2. Open `index.html` in a modern web browser
-3. The demo will run with simulated data
+### Option 2: Local backend
+1. Copy `.env.example` to `.env` and set `ESP_IP`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run: `python app.py`
+4. Open `http://127.0.0.1:8080/` — the dashboard shows live `GET /api/data` values only
 
 ## 📁 File Structure
 
 ```
-forest-fire-frontend/
-├── index.html          # Main dashboard
-├── settings.html       # Configuration page
-├── logs.html          # System logs viewer
-├── about.html         # Project information
-├── style.css          # Main stylesheet
-├── script.js          # Dashboard functionality
-├── manifest.json      # PWA manifest
-└── README.md          # This file
+forest-fire-detection-and-suppression-system/
+├── app.py                         # Unified Flask backend
+├── requirements.txt
+├── .env.example
+├── ESP8266_Gateway_NoPlugin.ino   # ESP8266 LoRa gateway firmware
+├── index.html                     # Dashboard (live /api/data)
+├── logs.html
+├── settings.html
+├── about.html
+├── style.css
+├── script.js
+└── README.md
 ```
 
 ## 🎛️ Dashboard Components
@@ -49,10 +53,9 @@ forest-fire-frontend/
 - **Fire Alert**: Current risk level and alert status
 
 ### Live Sensor Data
-- **Temperature**: Real-time temperature readings
-- **Humidity**: Relative humidity monitoring
-- **Smoke Level**: Smoke particle detection (ppm)
-- **Gas Level**: Combustible gas detection (ppm)
+- **Temperature**, **Humidity**, **Pressure** (`N/A` if the ESP does not send it), **MQ-4**
+- **Risk Score** and **Fire Prediction** from the Flask backend only
+- **Fire Risk Factor** gauge driven by Random Forest `predict_proba()` classes: NONE / POTENTIAL FIRE / CONFIRMED FIRE
 
 ### Emergency Controls
 - **Fire Extinguisher**: Deploy suppression system
@@ -125,23 +128,15 @@ The dashboard can be installed as a PWA:
 
 ## 🔄 Real-time Updates
 
-The dashboard auto-refreshes every 5 seconds by default. To change:
-1. Modify the meta refresh tag in HTML: `<meta http-equiv="refresh" content="5">`
-2. Update JavaScript intervals in `script.js`
+The dashboard polls `GET /api/data` about every 2 seconds. Sensor values, risk score, Random Forest prediction, and the Fire Risk Factor gauge update without a page reload. Missing readings display `N/A`; the UI never invents numbers.
 
 ## 🚨 Fire Risk Calculation
 
-The system calculates fire risk using a weighted scoring system:
-- **Temperature**: 0-40 points (higher = more risk)
-- **Humidity**: 0-20 points (lower = more risk)  
-- **Smoke**: 0-30 points (higher = more risk)
-- **Gas**: 0-10 points (higher = more risk)
+The Flask backend (`app.py`) is the single source of truth. The dashboard does not compute a second risk score.
 
-**Risk Levels**:
-- 0-19: Low Risk (Green)
-- 20-39: Moderate Risk (Yellow)
-- 40-69: High Risk (Orange)
-- 70+: Critical Risk (Red)
+- Weighted environmental index from real ESP temperature, humidity, MQ-4, and pressure when present
+- Random Forest classes: `None`, `Potential Fire`, `Confirmed Fire` (experimental baseline until a labeled CSV is provided)
+- Fire Risk Factor gauge uses `ml.prediction` and `ml.probabilities` from `/api/data`
 
 ## 🎨 Browser Support
 
@@ -153,11 +148,7 @@ The system calculates fire risk using a weighted scoring system:
 ## 🔧 Development
 
 ### Modifying JavaScript
-The main dashboard logic is in `script.js`. Key classes and functions:
-- `ForestFireDashboard`: Main dashboard controller
-- `updateSensorData()`: Processes sensor readings
-- `updateFireRisk()`: Calculates and displays fire risk
-- `triggerAlert()`: Handles alert notifications
+The live dashboard logic is inline in `index.html` and polls `/api/data`. `script.js` is a fallback client for older element IDs and does not generate sensor values.
 
 ### Adding New Pages
 1. Create new HTML file based on existing structure
